@@ -20,6 +20,7 @@ USE `LittleLemonDB` ;
 CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Customers` (
   `CustomerID` INT NOT NULL AUTO_INCREMENT,
   `CustomerName` VARCHAR(255) NOT NULL,
+  `CustomerName` VARCHAR(255) NOT NULL,
   `PhoneNumber` VARCHAR(255) NOT NULL,
   `EmailAddress` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`CustomerID`))
@@ -33,6 +34,8 @@ CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Bookings` (
   `BookingID` INT NOT NULL AUTO_INCREMENT,
   `BookingDate` DATE NOT NULL,
   `BookingTime` TIME NOT NULL,
+  `BookingDate` DATE NOT NULL,
+  `BookingTime` TIME NOT NULL,
   `TableNumber` INT NOT NULL,
   `NumberOfGuests` INT NOT NULL,
   `CustomerID` INT NOT NULL,
@@ -41,6 +44,21 @@ CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Bookings` (
   CONSTRAINT `customer_id_fk_bookings`
     FOREIGN KEY (`CustomerID`)
     REFERENCES `LittleLemonDB`.`Customers` (`CustomerID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `LittleLemonDB`.`MenuItems`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`MenuItems` (
+  `MenuItemID` INT NOT NULL AUTO_INCREMENT,
+  `StarterName` VARCHAR(255) NULL,
+  `CourseName` VARCHAR(255) NULL,
+  `DrinkName` VARCHAR(255) NULL,
+  `DessertName` VARCHAR(255) NULL,
+  PRIMARY KEY (`MenuItemID`))
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -86,9 +104,11 @@ CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Orders` (
   `OrderID` INT NOT NULL AUTO_INCREMENT,
   `Date` DATE NOT NULL,
   `MenuID` INT NOT NULL,
+  `MenuID` INT NOT NULL,
   `Quantity` INT NOT NULL,
   `TotalCost` DECIMAL(10,2) NOT NULL,
   `BookingID` INT NOT NULL,
+  `CustomerID` INT NOT NULL,
   `CustomerID` INT NOT NULL,
   PRIMARY KEY (`OrderID`),
   INDEX `booking_id_fk_idx` (`BookingID` ASC) VISIBLE,
@@ -142,9 +162,13 @@ CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Order delivery statuses` (
     REFERENCES `LittleLemonDB`.`Orders` (`OrderID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `staff_id_fk`
     FOREIGN KEY (`StaffID`)
     REFERENCES `LittleLemonDB`.`Staff` (`StaffID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
